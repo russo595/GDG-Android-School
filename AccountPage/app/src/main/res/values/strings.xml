@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AccountPage</string>
+    <string name="profile">Мой профиль</string>
+    <string name="music">Музыка</string>
+    <string name="friends">Друзья</string>
+    <string name="full_name">Сабитов Рустем</string>
+    <string name="email">mail@mail.ru</string>
+    <string name="notification">Уведомления</string>
+    <string name="on_notification">Включить уведомления</string>
+    <string name="off_notification">Выключить уведомления</string>
+</resources>
