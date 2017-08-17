@@ -1,8 +1,8 @@
 package com.example.test.calculator;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,21 +11,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 
 public class MainActivity extends ActionBarActivity {
 
     /**
      * Вызывается, когда активность создается впервые.
      */
-    boolean clear_screen = true;
-    boolean operator_state = false;
-    boolean insert_state = false;
-    boolean last_click = false;
-    float Num1;
-    float Num2;
-    float Answer;
-    String Operator = "";
-    protected EditText tv;
+    private boolean clear_screen = true;
+    private boolean operator_state = false;
+    private boolean insert_state = false;
+    private boolean last_click = false;
+    private float num1;
+    private float num2;
+    private float answer;
+    private String operator = "";
+    private EditText tv;
+
+    private static final String KEY_INDEX = "index";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,27 +38,25 @@ public class MainActivity extends ActionBarActivity {
         tv = (EditText) findViewById(R.id.tv);
         if (savedInstanceState != null) {
             tv.setText(savedInstanceState.getString(KEY_INDEX, ""));
-            Num1 = savedInstanceState.getFloat("num1");
-            Num2 = savedInstanceState.getFloat("num2");
-            Operator = savedInstanceState.getString("operator");
+            num1 = savedInstanceState.getFloat("num1");
+            num2 = savedInstanceState.getFloat("num2");
+            operator = savedInstanceState.getString("operator");
         }
     }
-
-    private static final String KEY_INDEX = "index";
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putString(KEY_INDEX, tv.getText().toString());
-        savedInstanceState.putFloat("num1", Num1);
-        savedInstanceState.putFloat("num2", Num2);
-        savedInstanceState.putString("operator", Operator);
+        savedInstanceState.putFloat("num1", num1);
+        savedInstanceState.putFloat("num2", num2);
+        savedInstanceState.putString("operator", operator);
     }
 
     public void insert_text(String text) {
         if (this.clear_screen) {
             tv.setText("");
-            if (text != "0") {
+            if (!Objects.equals(text, "0")) {
                 this.clear_screen = false;
             }
         }
@@ -66,7 +68,6 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -74,12 +75,8 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -100,75 +97,75 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (tv.getText().toString().length() > 0) {
-            this.Num1 = Float.parseFloat(tv.getText().toString());
+            this.num1 = Float.parseFloat(tv.getText().toString());
         }
         this.operator_state = true;
         this.clear_screen = true;
         this.last_click = false;
 
         if (operator.equals("+"))
-            this.Operator = "+";
+            this.operator = "+";
 
         else if (operator.equals("-"))
-            this.Operator = "-";
+            this.operator = "-";
 
         else if (operator.equals("*"))
-            this.Operator = "*";
+            this.operator = "*";
 
         else if (operator.equals("/"))
-            this.Operator = "/";
+            this.operator = "/";
 
         else if (operator.equals("±")) {
-            this.Answer = (-1) * this.Num1;
+            this.answer = (-1) * this.num1;
 
-            if (this.Answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.Answer + ""));
-            } else tv.setText(this.Answer + "");
+            if (this.answer % 1 == 0) {
+                tv.setText(String.valueOf((int) this.answer + ""));
+            } else tv.setText(this.answer + "");
             this.clear_screen = true;
 
-            this.Operator = "";
+            this.operator = "";
             this.last_click = true;
             this.operator_state = false;
         } else if (operator.equals("!")) {
-            this.Answer = factorial(this.Num1);
-            if (this.Answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.Answer + ""));
-            } else tv.setText(this.Answer + "");
+            this.answer = factorial(this.num1);
+            if (this.answer % 1 == 0) {
+                tv.setText(String.valueOf((int) this.answer + ""));
+            } else tv.setText(this.answer + "");
             this.clear_screen = true;
 
-            this.Operator = "";
+            this.operator = "";
             this.last_click = true;
             this.operator_state = false;
         } else if (operator.equals("√")) {
-            this.Answer = (float) Math.sqrt(Float.parseFloat(tv.getText().toString()));
-            if (this.Answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.Answer + ""));
-            } else tv.setText(this.Answer + "");
+            this.answer = (float) Math.sqrt(Float.parseFloat(tv.getText().toString()));
+            if (this.answer % 1 == 0) {
+                tv.setText(String.valueOf((int) this.answer + ""));
+            } else tv.setText(this.answer + "");
             this.clear_screen = true;
 
-            this.Operator = "";
+            this.operator = "";
             this.last_click = true;
             this.operator_state = false;
         } else if (operator.equals("d")) {
-            this.Answer = 1 / Float.parseFloat(tv.getText().toString());
-            if (this.Num1 == 0) {
+            this.answer = 1 / Float.parseFloat(tv.getText().toString());
+            if (this.num1 == 0) {
                 Toast t = Toast.makeText(this, R.string.error, Toast.LENGTH_LONG);
                 t.show();
-            } else if (this.Answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.Answer + ""));
+            } else if (this.answer % 1 == 0) {
+                tv.setText(String.valueOf((int) this.answer + ""));
             } else {
-                tv.setText(this.Answer + "");
+                tv.setText(this.answer + "");
                 this.clear_screen = true;
 
-                this.Operator = "";
+                this.operator = "";
                 this.last_click = true;
                 this.operator_state = false;
             }
         } else if (operator.equals("^"))
-            this.Operator = "^";
+            this.operator = "^";
 
         else if (operator.equals("%"))
-            this.Operator = "%";
+            this.operator = "%";
     }
 
     public float factorial(float n) {
@@ -188,31 +185,31 @@ public class MainActivity extends ActionBarActivity {
             tv.setText("0");
         }
         if (tv.getText().toString().length() > 0) {
-            this.Num2 = Float.parseFloat(tv.getText().toString());
+            this.num2 = Float.parseFloat(tv.getText().toString());
         }
-        if (this.Operator.equals("+")) {
-            this.Answer = this.Num1 + this.Num2;
-        } else if (this.Operator.equals("-")) {
-            this.Answer = this.Num1 - this.Num2;
-        } else if (this.Operator.equals("*")) {
-            this.Answer = this.Num1 * this.Num2;
-        } else if (this.Operator.equals("/")) {
-            this.Answer = this.Num1 / this.Num2;
-            if (this.Num2 == 0) {
+        if (this.operator.equals("+")) {
+            this.answer = this.num1 + this.num2;
+        } else if (this.operator.equals("-")) {
+            this.answer = this.num1 - this.num2;
+        } else if (this.operator.equals("*")) {
+            this.answer = this.num1 * this.num2;
+        } else if (this.operator.equals("/")) {
+            this.answer = this.num1 / this.num2;
+            if (this.num2 == 0) {
                 Toast t = Toast.makeText(this, R.string.error, Toast.LENGTH_LONG);
                 t.show();
             }
-        } else if (this.Operator.equals("^")) {
-            this.Answer = (float) Math.pow(this.Num1, this.Num2);
-        } else if (this.Operator.equals("%")) {
-            this.Answer = (this.Num1 * this.Num2) / 100;
+        } else if (this.operator.equals("^")) {
+            this.answer = (float) Math.pow(this.num1, this.num2);
+        } else if (this.operator.equals("%")) {
+            this.answer = (this.num1 * this.num2) / 100;
         } else {
-            this.Answer = Float.parseFloat(tv.getText().toString());
+            this.answer = Float.parseFloat(tv.getText().toString());
         }
 
-        if (this.Answer % 1 == 0) {
-            tv.setText(String.valueOf((int) this.Answer + ""));
-        } else tv.setText(this.Answer + "");
+        if (this.answer % 1 == 0) {
+            tv.setText(String.valueOf((int) this.answer + ""));
+        } else tv.setText(this.answer + "");
     }
 
     public void ButtonClickHandler(View v) {
@@ -288,11 +285,11 @@ public class MainActivity extends ActionBarActivity {
                 set_operator("d");
                 break;
             case R.id.buttonExe:
-                if (tv.getText().toString().length() > 0 && this.Operator != "") {
+                if (tv.getText().toString().length() > 0 && this.operator != "") {
                     calculator();
                     this.clear_screen = true;
 
-                    this.Operator = "";
+                    this.operator = "";
                     this.operator_state = false;
                 }
                 break;
@@ -308,7 +305,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
             case R.id.buttonClear:
 
-                this.Operator = "";
+                this.operator = "";
                 this.operator_state = false;
                 this.insert_state = false;
                 this.last_click = false;
