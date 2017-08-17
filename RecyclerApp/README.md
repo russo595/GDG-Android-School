@@ -1,1 +1,1 @@
-![alt image](https://user-images.githubusercontent.com/19315367/29298186-a8222276-816e-11e7-8728-d6ad425031b9.gif)
+![alt image](https://user-images.githubusercontent.com/19315367/29430481-383e1eca-839d-11e7-8bca-5c3b1f622771.gif)
