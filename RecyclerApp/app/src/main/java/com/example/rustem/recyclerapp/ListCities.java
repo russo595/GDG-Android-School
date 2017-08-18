@@ -2,6 +2,7 @@ package com.example.rustem.recyclerapp;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +20,13 @@ public class ListCities {
             String countryName = locale.getDisplayCountry();
             capitalModels.add(new CapitalModel(countryName, "", code));
         }
+
+        Collections.sort(capitalModels, new Comparator<CapitalModel>() {
+            @Override
+            public int compare(CapitalModel o1, CapitalModel o2) {
+                return o1.getCountryName().compareTo(o2.getCountryName());
+            }
+        });
         return capitalModels;
     }
 }
