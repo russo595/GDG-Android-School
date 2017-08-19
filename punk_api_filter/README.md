@@ -1,3 +1,3 @@
-Список пив https://punkapi.com/documentation/v2
+Список сортов пива https://punkapi.com/documentation/v2 + фильтрация по параметрам
 
-![screenshot_2017-08-19-03-08-52](https://user-images.githubusercontent.com/19315367/29482265-f0a84fcc-8496-11e7-8024-62fcf7b44b49.png)
+![device-2017-08-20-014948](https://user-images.githubusercontent.com/19315367/29490620-773b58e6-854a-11e7-84da-93022aae4a78.gif)

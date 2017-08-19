@@ -13,5 +13,7 @@
     <string name="network.loading">Загрузка…</string>
     <string name="network.error">Ошибка запроса</string>
     <string name="name">Name</string>
+    <string name="abv">ABV</string>
+    <string name="ibu">IBU</string>
 
 </resources>

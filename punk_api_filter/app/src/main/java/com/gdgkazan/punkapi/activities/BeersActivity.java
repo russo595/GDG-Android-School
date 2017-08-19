@@ -14,12 +14,14 @@ import android.widget.Toast;
 
 import com.gdgkazan.punkapi.BeersAdapter;
 import com.gdgkazan.punkapi.R;
+import com.gdgkazan.punkapi.UtilsPunk.UtilPunk;
 import com.gdgkazan.punkapi.api.ApiFactory;
 import com.gdgkazan.punkapi.api.BeerApi;
 import com.gdgkazan.punkapi.models.Beer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,7 +66,8 @@ public class BeersActivity extends AppCompatActivity {
                 }, 2000);
             }
         });
-        showBeersByNumberFilter(22, 33);
+
+        showBeersUsingFilter(new UtilPunk().getDataMap(getIntent()));
     }
 
     private void showAllBeers() {
@@ -98,13 +101,15 @@ public class BeersActivity extends AppCompatActivity {
         });
     }
 
-    private void showBeersByNumberFilter(int abvGt, int abvLt) {
-        Call<List<Beer>> call = beerApi.getBeerWithFilter(abvGt, abvLt);
+    private void showBeersUsingFilter(Map<String, Integer> data) {
+
+        Call<List<Beer>> call = beerApi.getBeerWithFilter(data);
 
         call.enqueue(new Callback<List<Beer>>() {
             @Override
             public void onResponse(Call<List<Beer>> call, Response<List<Beer>> response) {
                 if (response.isSuccessful()) {
+                    Toast.makeText(BeersActivity.this, "Найдено: " + response.body().size(), Toast.LENGTH_SHORT).show();
                     beersAdapter.updateData(response.body());
                 } else {
                     Toast.makeText(BeersActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
