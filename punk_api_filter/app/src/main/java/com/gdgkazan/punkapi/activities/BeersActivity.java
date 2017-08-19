@@ -1,6 +1,5 @@
 package com.gdgkazan.punkapi.activities;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 import com.gdgkazan.punkapi.BeersAdapter;
 import com.gdgkazan.punkapi.R;
 import com.gdgkazan.punkapi.api.ApiFactory;
-import com.gdgkazan.punkapi.api.BeerService;
+import com.gdgkazan.punkapi.api.BeerApi;
 import com.gdgkazan.punkapi.models.Beer;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import retrofit2.Response;
 
 public class BeersActivity extends AppCompatActivity {
 
-    private BeerService beerService;
+    private BeerApi beerApi;
 
     private BeersAdapter beersAdapter;
 
@@ -40,7 +39,8 @@ public class BeersActivity extends AppCompatActivity {
         setContentView(R.layout.ac_beer);
 
         // Создаем сервис через который будет выполняться запрос
-        beerService = ApiFactory.getRetrofitInstance().create(BeerService.class);
+        beerApi = ApiFactory.getRetrofitInstance().create(BeerApi.class);
+
         RecyclerView citiesListView = (RecyclerView) findViewById(R.id.recycler_view);
         LayoutManager layoutManager = new LinearLayoutManager(this);
         citiesListView.setLayoutManager(layoutManager);
@@ -59,17 +59,17 @@ public class BeersActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        fetchRandomBeer();
+                        showAllBeers();
                     }
                 }, 2000);
             }
         });
-        fetchRandomBeer();
+        showBeersByNumberFilter(22, 33);
     }
 
-    private void fetchRandomBeer() {
+    private void showAllBeers() {
         // Создаем экземпляр запроса со всем необходимыми настройками
-        Call<List<Beer>> call = beerService.getRandomBeers();
+        Call<List<Beer>> call = beerApi.getAllBeers();
         // Отображаем progress bar
         swipeContainer.setRefreshing(true);
         // Выполняем запрос асинхронно
@@ -98,31 +98,22 @@ public class BeersActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchFilterBeer(String date, int abvGt) {
-        // Создаем экземпляр запроса со всем необходимыми настройками
-        Call<List<Beer>> call = beerService.getBeerWithFilter(date, abvGt);
-        // Отображаем progress bar
-        swipeContainer.setRefreshing(true);
-        // Выполняем запрос асинхронно
+    private void showBeersByNumberFilter(int abvGt, int abvLt) {
+        Call<List<Beer>> call = beerApi.getBeerWithFilter(abvGt, abvLt);
+
         call.enqueue(new Callback<List<Beer>>() {
-            // В случае если запрос выполнился успешно, то мы переходим в метод onResponse(...)
             @Override
-            public void onResponse(@NonNull Call<List<Beer>> call, @NonNull Response<List<Beer>> response) {
+            public void onResponse(Call<List<Beer>> call, Response<List<Beer>> response) {
                 if (response.isSuccessful()) {
-                    // Если в ответ нам пришел код 2xx, то отображаем содержимое запроса
                     beersAdapter.updateData(response.body());
                 } else {
-                    // Если пришел код ошибки, то обрабатываем её
                     Toast.makeText(BeersActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
                 }
-                // Скрываем progress bar
                 swipeContainer.setRefreshing(false);
             }
 
-            // Если запрос не удалось выполнить, например, на телефоне отсутствует подключение к интернету
             @Override
-            public void onFailure(@NonNull Call<List<Beer>> call, @NonNull Throwable t) {
-                // Скрываем progress bar
+            public void onFailure(Call<List<Beer>> call, Throwable t) {
                 swipeContainer.setRefreshing(false);
                 Toast.makeText(BeersActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
                 Log.d("Error", t.getMessage());
