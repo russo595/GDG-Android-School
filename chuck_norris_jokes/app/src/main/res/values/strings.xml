@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">Jokes</string>
 
-    <!-- Beer screen -->
-    <string name="beer.abv">abv</string>
-    <string name="beer.ibu">ibu</string>
-    <string name="beer.srm">srm</string>
-    <string name="beer.description">Описание</string>
-
     <!-- Network -->
     <string name="network.loading">Загрузка…</string>
     <string name="network.error">Ошибка запроса</string>
+    <string name="number">number</string>
 </resources>
