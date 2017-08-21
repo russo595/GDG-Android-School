@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Weather in Kazan</string>
+    <string name="morning">Утро</string>
+    <string name="day">День</string>
+    <string name="evening">Вечер</string>
+    <string name="night">Ночь</string>
+    <string name="network_error">Ошибка запроса</string>
+    <string name="date">01.01.1111</string>
+</resources>
