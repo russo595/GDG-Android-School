@@ -15,6 +15,8 @@ import com.rustem.rustem.weatherinkazan.model.MainData;
 import com.rustem.rustem.weatherinkazan.openweather_api.ApiFactory;
 import com.rustem.rustem.weatherinkazan.openweather_api.WeatherService;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,9 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int CNT = 7;
 
-    private RecyclerView recyclerView;
-
-    private SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private WeatherService weatherService;
 
@@ -37,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         weatherService = ApiFactory.getRetrofitInstance().create(WeatherService.class);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         weatherAdapter = new WeatherAdapter(getApplicationContext());
         swipe();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -71,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void swipe() {
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeRefreshLayout.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
