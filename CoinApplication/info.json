@@ -1,0 +1,39 @@
+{
+  "Response": "Success",
+  "Message": "Coin list succesfully returned!",
+  "BaseImageUrl": "https://www.cryptocompare.com",
+  "BaseLinkUrl": "https://www.cryptocompare.com",
+  "Data": {
+    "SUB": {
+      "Id": "100944",
+      "Url": "/coins/sub/overview",
+      "ImageUrl": "/media/1383362/sub.png",
+      "Name": "SUB",
+      "CoinName": "Subscriptio",
+      "FullName": "Subscriptio (SUB)",
+      "Algorithm": "PoS",
+      "ProofType": "PoS",
+      "FullyPremined": "0",
+      "TotalCoinSupply": "10000000",
+      "PreMinedValue": "N/A",
+      "TotalCoinsFreeFloat": "N/A",
+      "SortOrder": "1232"
+    },
+    "USC": {
+      "Id": "100954",
+      "Url": "/coins/usc/overview",
+      "ImageUrl": "/media/1383363/usc.png",
+      "Name": "USC",
+      "CoinName": "Ultimate Secure Cash",
+      "FullName": "Ultimate Secure Cash (USC)",
+      "Algorithm": "SHA256",
+      "ProofType": "PoS",
+      "FullyPremined": "0",
+      "TotalCoinSupply": "200084200",
+      "PreMinedValue": "N/A",
+      "TotalCoinsFreeFloat": "N/A",
+      "SortOrder": "1233"
+    }
+  },
+  "Type": 100
+}
