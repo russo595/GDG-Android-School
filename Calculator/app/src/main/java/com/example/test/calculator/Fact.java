@@ -1,10 +1,15 @@
 package com.example.test.calculator;
 
-public class Fact {
-    public void factorial(float n) {
-        float ans = 1;
-        for (int i = 1; i <= n; i++) {
-            ans = ans * i;
-        }
+import android.content.Context;
+import android.widget.Toast;
+
+class Fact {
+    static float factorial(float n, Context context) {
+        if (n == 0)
+            return 1;
+        else if (n % 1 != 0 || n < 0) {
+            Toast.makeText(context, R.string.error2, Toast.LENGTH_LONG).show();
+            return 0;
+        } else return n * factorial(n - 1, context);
     }
 }

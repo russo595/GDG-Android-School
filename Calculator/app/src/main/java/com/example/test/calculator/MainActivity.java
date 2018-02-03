@@ -2,7 +2,7 @@ package com.example.test.calculator;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
+import static com.example.test.calculator.Fact.factorial;
 
-public class MainActivity extends ActionBarActivity {
+
+public class MainActivity extends AppCompatActivity {
 
     /**
      * Вызывается, когда активность создается впервые.
@@ -35,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv = (EditText) findViewById(R.id.tv);
+        tv = findViewById(R.id.tv);
         if (savedInstanceState != null) {
             tv.setText(savedInstanceState.getString(KEY_INDEX, ""));
             num1 = savedInstanceState.getFloat("num1");
@@ -53,7 +55,7 @@ public class MainActivity extends ActionBarActivity {
         savedInstanceState.putString("operator", operator);
     }
 
-    public void insert_text(String text) {
+    public void insertText(String text) {
         if (this.clear_screen) {
             tv.setText("");
             if (!Objects.equals(text, "0")) {
@@ -88,8 +90,8 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void set_operator(String operator) {
-        EditText tv = (EditText) findViewById(R.id.tv);
+    public void setOperator(String operator) {
+        EditText tv = findViewById(R.id.tv);
         if (tv.getText().toString().equals("."))
             tv.setText("0");
         if (this.insert_state && this.operator_state && this.last_click) {
@@ -103,186 +105,200 @@ public class MainActivity extends ActionBarActivity {
         this.clear_screen = true;
         this.last_click = false;
 
-        if (operator.equals("+"))
-            this.operator = "+";
+        switch (operator) {
+            case "+":
+                this.operator = "+";
 
-        else if (operator.equals("-"))
-            this.operator = "-";
+                break;
+            case "-":
+                this.operator = "-";
 
-        else if (operator.equals("*"))
-            this.operator = "*";
+                break;
+            case "*":
+                this.operator = "*";
 
-        else if (operator.equals("/"))
-            this.operator = "/";
+                break;
+            case "/":
+                this.operator = "/";
 
-        else if (operator.equals("±")) {
-            this.answer = (-1) * this.num1;
+                break;
+            case "±":
+                this.answer = (-1) * this.num1;
 
-            if (this.answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.answer + ""));
-            } else tv.setText(this.answer + "");
-            this.clear_screen = true;
-
-            this.operator = "";
-            this.last_click = true;
-            this.operator_state = false;
-        } else if (operator.equals("!")) {
-            this.answer = factorial(this.num1);
-            if (this.answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.answer + ""));
-            } else tv.setText(this.answer + "");
-            this.clear_screen = true;
-
-            this.operator = "";
-            this.last_click = true;
-            this.operator_state = false;
-        } else if (operator.equals("√")) {
-            this.answer = (float) Math.sqrt(Float.parseFloat(tv.getText().toString()));
-            if (this.answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.answer + ""));
-            } else tv.setText(this.answer + "");
-            this.clear_screen = true;
-
-            this.operator = "";
-            this.last_click = true;
-            this.operator_state = false;
-        } else if (operator.equals("d")) {
-            this.answer = 1 / Float.parseFloat(tv.getText().toString());
-            if (this.num1 == 0) {
-                Toast t = Toast.makeText(this, R.string.error, Toast.LENGTH_LONG);
-                t.show();
-            } else if (this.answer % 1 == 0) {
-                tv.setText(String.valueOf((int) this.answer + ""));
-            } else {
-                tv.setText(this.answer + "");
+                if (this.answer % 1 == 0) {
+                    tv.setText(String.valueOf((int) this.answer + ""));
+                } else tv.setText(String.format("%s", this.answer));
                 this.clear_screen = true;
 
                 this.operator = "";
                 this.last_click = true;
                 this.operator_state = false;
-            }
-        } else if (operator.equals("^"))
-            this.operator = "^";
 
-        else if (operator.equals("%"))
-            this.operator = "%";
+                break;
+            case "!":
+                this.answer = factorial(this.num1, getApplicationContext());
+                if (this.answer % 1 == 0) {
+                    tv.setText(String.valueOf((int) this.answer + ""));
+                } else tv.setText(String.format("%s", this.answer));
+                this.clear_screen = true;
+
+                this.operator = "";
+                this.last_click = true;
+                this.operator_state = false;
+
+                break;
+            case "√":
+                this.answer = (float) Math.sqrt(Float.parseFloat(tv.getText().toString()));
+                if (this.answer % 1 == 0) {
+                    tv.setText(String.valueOf((int) this.answer + ""));
+                } else tv.setText(String.format("%s", this.answer));
+                this.clear_screen = true;
+
+                this.operator = "";
+                this.last_click = true;
+                this.operator_state = false;
+
+                break;
+            case "d":
+                this.answer = 1 / Float.parseFloat(tv.getText().toString());
+                if (this.num1 == 0) {
+                    Toast t = Toast.makeText(this, R.string.error, Toast.LENGTH_LONG);
+                    t.show();
+                } else if (this.answer % 1 == 0) {
+                    tv.setText(String.valueOf((int) this.answer + ""));
+                } else {
+                    tv.setText(String.format("%s", this.answer));
+                    this.clear_screen = true;
+
+                    this.operator = "";
+                    this.last_click = true;
+                    this.operator_state = false;
+                }
+
+                break;
+            case "^":
+                this.operator = "^";
+
+                break;
+            case "%":
+                this.operator = "%";
+
+                break;
+        }
     }
-
-    public float factorial(float n) {
-        if (n == 0)
-            return 1;
-        else if (n % 1 != 0 || n < 0) {
-            Toast toast = Toast.makeText(this, R.string.error2, Toast.LENGTH_LONG);
-            toast.show();
-            return 0;
-        } else return n * factorial(n - 1);
-    }
-
 
     public void calculator() {
-        EditText tv = (EditText) findViewById(R.id.tv);
+        EditText tv = findViewById(R.id.tv);
         if (tv.getText().toString().equals(".")) {
             tv.setText("0");
         }
         if (tv.getText().toString().length() > 0) {
             this.num2 = Float.parseFloat(tv.getText().toString());
         }
-        if (this.operator.equals("+")) {
-            this.answer = this.num1 + this.num2;
-        } else if (this.operator.equals("-")) {
-            this.answer = this.num1 - this.num2;
-        } else if (this.operator.equals("*")) {
-            this.answer = this.num1 * this.num2;
-        } else if (this.operator.equals("/")) {
-            this.answer = this.num1 / this.num2;
-            if (this.num2 == 0) {
-                Toast t = Toast.makeText(this, R.string.error, Toast.LENGTH_LONG);
-                t.show();
-            }
-        } else if (this.operator.equals("^")) {
-            this.answer = (float) Math.pow(this.num1, this.num2);
-        } else if (this.operator.equals("%")) {
-            this.answer = (this.num1 * this.num2) / 100;
-        } else {
-            this.answer = Float.parseFloat(tv.getText().toString());
+        switch (this.operator) {
+            case "+":
+                this.answer = this.num1 + this.num2;
+                break;
+            case "-":
+                this.answer = this.num1 - this.num2;
+                break;
+            case "*":
+                this.answer = this.num1 * this.num2;
+                break;
+            case "/":
+                this.answer = this.num1 / this.num2;
+                if (this.num2 == 0) {
+                    Toast t = Toast.makeText(this, R.string.error, Toast.LENGTH_LONG);
+                    t.show();
+                }
+                break;
+            case "^":
+                this.answer = (float) Math.pow(this.num1, this.num2);
+                break;
+            case "%":
+                this.answer = (this.num1 * this.num2) / 100;
+                break;
+            default:
+                this.answer = Float.parseFloat(tv.getText().toString());
+                break;
         }
 
         if (this.answer % 1 == 0) {
             tv.setText(String.valueOf((int) this.answer + ""));
-        } else tv.setText(this.answer + "");
+        } else tv.setText(String.format("%s", this.answer));
     }
 
     public void ButtonClickHandler(View v) {
-        EditText tv = (EditText) findViewById(R.id.tv);
-        Button buttonExe = (Button) findViewById(R.id.buttonExe);
+        EditText tv = findViewById(R.id.tv);
+        Button buttonExe = findViewById(R.id.buttonExe);
         buttonExe.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         switch (v.getId()) {
             case R.id.button0:
-                insert_text("0");
+                insertText("0");
                 break;
             case R.id.button1:
-                insert_text("1");
+                insertText("1");
                 break;
             case R.id.button2:
-                insert_text("2");
+                insertText("2");
                 break;
             case R.id.button3:
-                insert_text("3");
+                insertText("3");
                 break;
             case R.id.button4:
-                insert_text("4");
+                insertText("4");
                 break;
             case R.id.button5:
-                insert_text("5");
+                insertText("5");
                 break;
             case R.id.button6:
-                insert_text("6");
+                insertText("6");
                 break;
             case R.id.button7:
-                insert_text("7");
+                insertText("7");
                 break;
             case R.id.button8:
-                insert_text("8");
+                insertText("8");
                 break;
             case R.id.button9:
-                insert_text("9");
+                insertText("9");
                 break;
             case R.id.buttonPoint:
                 if (!tv.getText().toString().contains(".") || this.operator_state) {
-                    if (tv.getText().toString().equals("0")) insert_text("0.");
-                    else insert_text(".");
+                    if (tv.getText().toString().equals("0")) insertText("0.");
+                    else insertText(".");
                 }
 
                 break;
             case R.id.buttonAdd:
-                set_operator("+");
+                setOperator("+");
                 break;
             case R.id.buttonSub:
-                set_operator("-");
+                setOperator("-");
                 break;
             case R.id.buttonMulti:
-                set_operator("*");
+                setOperator("*");
                 break;
             case R.id.buttonDiv:
-                set_operator("/");
+                setOperator("/");
                 break;
             case R.id.buttonSqr:
-                set_operator("√");
+                setOperator("√");
                 break;
             case R.id.buttonPM:
-                set_operator("±");
+                setOperator("±");
                 break;
             case R.id.buttonPow:
-                set_operator("^");
+                setOperator("^");
                 break;
             case R.id.buttonMod:
-                set_operator("%");
+                setOperator("%");
                 break;
             case R.id.buttonFac:
-                set_operator("!");
+                setOperator("!");
                 break;
             case R.id.buttonOnediv:
-                set_operator("d");
+                setOperator("d");
                 break;
             case R.id.buttonExe:
                 if (tv.getText().toString().length() > 0 && this.operator != "") {
@@ -314,6 +330,4 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
     }
-
-
 }
