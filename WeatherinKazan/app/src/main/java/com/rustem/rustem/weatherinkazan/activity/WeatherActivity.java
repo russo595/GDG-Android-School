@@ -3,8 +3,8 @@ package com.rustem.rustem.weatherinkazan.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 import static com.rustem.rustem.weatherinkazan.BuildConfig.ID_CITY;
 
-public class MainActivity extends AppCompatActivity {
+public class WeatherActivity extends FragmentActivity {
 
     private static final int CNT = 7;
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     weatherAdapter.updateData(response.body().getDataDays());
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WeatherActivity.this, R.string.network_error, Toast.LENGTH_SHORT).show();
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
